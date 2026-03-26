@@ -355,17 +355,29 @@
             cursor: pointer;
         }
 
+        /* ========== ДЕСКТОПНАЯ ВЕРСИЯ (громкость видна) ========== */
+        @media (min-width: 769px) {
+            .volume-control-mobile {
+                display: flex;
+            }
+        }
+
+        /* ========== МОБИЛЬНАЯ ВЕРСИЯ (громкость скрыта, всё компактно) ========== */
         @media (max-width: 768px) {
             .container {
-                padding: 20px 16px 160px;
+                padding: 20px 16px 120px;
             }
             .logo h1 {
                 font-size: 28px;
             }
+            
+            /* Нижний плеер на мобильных — компактная версия */
+            .bottom-player {
+                padding: 12px 16px;
+            }
             .player-container {
                 flex-direction: column;
-                gap: 12px;
-                padding-bottom: 8px;
+                gap: 10px;
             }
             .track-info-mini {
                 width: 100%;
@@ -374,37 +386,41 @@
             .track-title-mini, .track-artist-mini {
                 white-space: normal;
                 text-align: center;
+                font-size: 14px;
+            }
+            .track-title-mini {
+                font-size: 15px;
+                font-weight: 600;
+            }
+            .track-artist-mini {
+                font-size: 12px;
             }
             .progress-container {
                 width: 100%;
-                margin-bottom: 4px;
+                margin: 4px 0;
             }
             .player-controls {
                 order: -1;
                 justify-content: center;
-                margin-bottom: 8px;
+                margin-bottom: 4px;
+                gap: 12px;
             }
             .ctrl-btn {
-                width: 44px;
-                height: 44px;
-                font-size: 20px;
-            }
-            .play-btn {
-                width: 52px;
-                height: 52px;
+                width: 48px;
+                height: 48px;
                 font-size: 22px;
             }
+            .play-btn {
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
+            }
+            
+            /* Скрываем громкость на мобильных */
             .volume-control {
-                position: static;
-                justify-content: center;
-                width: 100%;
-                margin-top: 8px;
-                padding-top: 8px;
-                border-top: 0.5px solid rgba(0, 0, 0, 0.05);
+                display: none !important;
             }
-            .volume-slider {
-                width: 120px;
-            }
+            
             .track-item {
                 padding: 12px 16px;
             }
@@ -412,6 +428,16 @@
                 width: 44px;
                 height: 44px;
                 font-size: 20px;
+            }
+            .track-number {
+                width: 28px;
+                font-size: 14px;
+            }
+            .track-name {
+                font-size: 15px;
+            }
+            .track-artist {
+                font-size: 12px;
             }
         }
     </style>
@@ -489,9 +515,7 @@
     const tracksData = [
         { id: 1, title: "Supreme X Vetements", artist: "FACE", file: "FACE_-_Supreme_X_Vetements_64742030.mp3", duration: 150 },
         { id: 2, title: "Лабиринт", artist: "FACE", file: "FACE_-_LABIRINT_66800217.mp3", duration: 210 },
-        { id: 3, title: "PSP", artist: "FACE", file: "FACE_-_PSP_64742023.mp3", duration: 198 },
-        { id: 4, title: "Ocean Breeze", artist: "Chill & Relax", file: "ocean-breeze.mp3", duration: 225 },
-        { id: 5, title: "Ocea", artist: "Chill & Relax", file: "ocean-breeze.mp3", duration: 225 }
+        { id: 3, title: "PSP", artist: "FACE", file: "FACE_-_PSP_64742023.mp3", duration: 198 }
     ];
 
     let currentIndex = 0;
@@ -600,12 +624,10 @@
         }
     }
 
-    // Остановка текущего трека (полная)
     function stopCurrentTrack() {
         if (audio) {
             audio.pause();
             audio.currentTime = 0;
-            // Удаляем обработчики, чтобы старый трек не влиял
             audio.onended = null;
             audio.ontimeupdate = null;
         }
@@ -621,10 +643,8 @@
         const wasPlaying = isPlaying;
         const currentVolume = volumeSlider.value;
         
-        // ПОЛНАЯ ОСТАНОВКА старого трека
         stopCurrentTrack();
         
-        // Создаём новый аудиоэлемент
         if (usePreload && preloadAudio.src && preloadAudio.src.includes(track.file)) {
             audio = preloadAudio;
             preloadAudio = new Audio();
@@ -719,7 +739,6 @@
     }
 
     function nextTrack() {
-        // Останавливаем текущий трек мгновенно
         if (audio) {
             audio.pause();
             audio.currentTime = 0;
@@ -729,7 +748,6 @@
         if (nextIndex !== currentIndex) {
             currentIndex = nextIndex;
             loadTrack(currentIndex, true);
-            // Если плеер был на паузе, не запускаем автоматически
             if (isPlaying) {
                 setTimeout(() => {
                     if (audio) audio.play().catch(e => console.log(e));
@@ -739,7 +757,6 @@
     }
 
     function prevTrack() {
-        // Останавливаем текущий трек мгновенно
         if (audio) {
             audio.pause();
             audio.currentTime = 0;
