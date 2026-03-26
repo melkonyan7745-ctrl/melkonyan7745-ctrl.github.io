@@ -355,7 +355,7 @@
             cursor: pointer;
         }
 
-        /* ========== МОБИЛЬНАЯ ВЕРСИЯ (исправлена) ========== */
+        /* ========== МОБИЛЬНАЯ ВЕРСИЯ ========== */
         @media (max-width: 768px) {
             .container {
                 padding: 20px 16px 160px;
@@ -496,6 +496,7 @@
     let currentIndex = 0;
     let isPlaying = false;
     let audio = new Audio();
+    let preloadAudio = new Audio(); // для предзагрузки следующего трека
     let shuffleMode = false;
     let repeatMode = 'none';
     let searchQuery = '';
@@ -571,7 +572,36 @@
         });
     }
 
-    function loadTrack(index) {
+    // Получить следующий индекс трека (без учёта загрузки)
+    function getNextTrackIndex() {
+        if (shuffleMode) {
+            let next;
+            do {
+                next = Math.floor(Math.random() * tracksData.length);
+            } while (next === currentIndex && tracksData.length > 1);
+            return next;
+        } else {
+            let next = currentIndex + 1;
+            if (next >= tracksData.length) {
+                next = repeatMode === 'all' ? 0 : currentIndex;
+            }
+            return next;
+        }
+    }
+
+    // Предзагрузка следующего трека
+    function preloadNextTrack() {
+        const nextIndex = getNextTrackIndex();
+        if (nextIndex !== currentIndex && nextIndex < tracksData.length) {
+            const nextTrack = tracksData[nextIndex];
+            if (nextTrack && nextTrack.file) {
+                preloadAudio.src = `audio/${nextTrack.file}`;
+                preloadAudio.load();
+            }
+        }
+    }
+
+    function loadTrack(index, usePreload = false) {
         if (index < 0) index = 0;
         if (index >= tracksData.length) index = 0;
         currentIndex = index;
@@ -580,8 +610,16 @@
 
         const wasPlaying = isPlaying;
         const currentVolume = audio.volume;
-        audio.pause();
-        audio = new Audio(`audio/${track.file}`);
+        
+        // Если есть предзагруженный трек и он тот, который нужен — используем его
+        if (usePreload && preloadAudio.src && preloadAudio.src.includes(track.file)) {
+            audio = preloadAudio;
+            preloadAudio = new Audio(); // создаём новый для следующей предзагрузки
+        } else {
+            audio.pause();
+            audio = new Audio(`audio/${track.file}`);
+        }
+        
         audio.volume = currentVolume;
         volumeSlider.value = currentVolume;
 
@@ -590,6 +628,9 @@
         });
         audio.addEventListener('timeupdate', updateProgress);
         audio.addEventListener('ended', handleTrackEnd);
+        
+        // Убираем старые обработчики с preloadAudio
+        preloadAudio.oncanplaythrough = null;
 
         miniTitle.textContent = track.title;
         miniArtist.textContent = track.artist;
@@ -599,10 +640,14 @@
             audio.play().then(() => {
                 isPlaying = true;
                 updatePlayButton();
+                // После начала воспроизведения предзагружаем следующий
+                preloadNextTrack();
             }).catch(() => {});
         } else {
             isPlaying = false;
             updatePlayButton();
+            // Всё равно предзагружаем следующий в фоне
+            preloadNextTrack();
         }
 
         renderTrackList();
@@ -612,12 +657,20 @@
         if (repeatMode === 'one') {
             audio.currentTime = 0;
             audio.play();
+            preloadNextTrack();
         } else if (repeatMode === 'all' || shuffleMode) {
-            nextTrack();
+            const nextIndex = getNextTrackIndex();
+            if (nextIndex !== currentIndex) {
+                currentIndex = nextIndex;
+                loadTrack(currentIndex, true);
+                if (isPlaying) audio.play();
+            }
         } else {
             const nextIndex = currentIndex + 1;
             if (nextIndex < tracksData.length) {
-                nextTrack();
+                currentIndex = nextIndex;
+                loadTrack(currentIndex, true);
+                if (isPlaying) audio.play();
             } else {
                 isPlaying = false;
                 updatePlayButton();
@@ -643,6 +696,7 @@
             audio.play().then(() => {
                 isPlaying = true;
                 updatePlayButton();
+                preloadNextTrack();
             }).catch(e => console.log(e));
         } else {
             audio.pause();
@@ -660,20 +714,10 @@
     }
 
     function nextTrack() {
-        let nextIndex;
-        if (shuffleMode) {
-            do {
-                nextIndex = Math.floor(Math.random() * tracksData.length);
-            } while (nextIndex === currentIndex && tracksData.length > 1);
-        } else {
-            nextIndex = currentIndex + 1;
-            if (nextIndex >= tracksData.length) {
-                nextIndex = repeatMode === 'all' ? 0 : currentIndex;
-            }
-        }
+        const nextIndex = getNextTrackIndex();
         if (nextIndex !== currentIndex) {
             currentIndex = nextIndex;
-            loadTrack(currentIndex);
+            loadTrack(currentIndex, true);
             if (isPlaying) audio.play();
         }
     }
@@ -706,6 +750,7 @@
                 repeatBtn.classList.remove('active');
                 repeatBtn.querySelector('i').className = 'fas fa-repeat';
             }
+            preloadNextTrack();
         } else {
             shuffleBtn.classList.remove('active');
         }
@@ -726,6 +771,7 @@
             repeatBtn.classList.remove('active');
             repeatBtn.querySelector('i').className = 'fas fa-repeat';
         }
+        preloadNextTrack();
     }
 
     function seek(e) {
