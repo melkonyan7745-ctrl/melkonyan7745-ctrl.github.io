@@ -6,7 +6,6 @@
     <title>QQMusic</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Стили (полностью как в предыдущей версии) */
         * {
             margin: 0;
             padding: 0;
@@ -173,7 +172,6 @@
             gap: 16px;
             cursor: pointer;
             transition: all 0.2s;
-            position: relative;
         }
 
         .track-item:hover {
@@ -243,22 +241,6 @@
             color: #8e8e93;
             background: white;
             border-radius: 24px;
-        }
-
-        /* Индикатор загрузки */
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(0, 122, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #007aff;
-            animation: spin 0.6s linear infinite;
-            margin-left: 8px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
 
         /* ПК Плеер */
@@ -337,11 +319,6 @@
             font-size: 22px;
         }
 
-        .play-btn:hover {
-            background: #005fc4;
-            color: white;
-        }
-
         .progress-area {
             flex: 2;
             min-width: 200px;
@@ -395,7 +372,7 @@
             cursor: pointer;
         }
 
-        /* Профиль и модалки (сокращены для краткости, но полные) */
+        /* Профиль — улучшенный дизайн */
         .profile-tab {
             max-width: 500px;
             margin: 0 auto;
@@ -417,8 +394,9 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            font-size: 48px;
             color: white;
+            font-size: 48px;
+            font-weight: 600;
         }
 
         .profile-name {
@@ -430,39 +408,39 @@
         .profile-email {
             color: #8e8e93;
             margin-bottom: 24px;
+            font-size: 14px;
         }
 
         .profile-actions {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 24px;
             margin-top: 24px;
         }
 
-        .profile-btn {
+        .profile-icon-btn {
             background: none;
             border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-size: 16px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            width: 52px;
+            height: 52px;
+            border-radius: 52px;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.2s;
+            color: #007aff;
+            background: rgba(0, 122, 255, 0.1);
         }
 
-        .edit-btn {
+        .profile-icon-btn:hover {
             background: #007aff;
             color: white;
+            transform: scale(1.05);
         }
 
-        .logout-confirm-btn {
-            background: rgba(255, 59, 48, 0.1);
-            color: #ff3b30;
-        }
-
+        /* Модальные окна (красивый дизайн) */
         .modal {
             display: none;
             position: fixed;
@@ -488,11 +466,35 @@
             max-width: 400px;
             width: 90%;
             text-align: center;
+            animation: modalFadeIn 0.2s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-content h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .modal-content p {
+            color: #8e8e93;
+            margin-bottom: 24px;
         }
 
         .input-group {
             margin-bottom: 16px;
             text-align: left;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #8e8e93;
+            margin-bottom: 6px;
+            display: block;
         }
 
         .input-group input {
@@ -501,35 +503,74 @@
             border: 0.5px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             font-size: 16px;
+            background: #f9f9fb;
+            transition: all 0.2s;
         }
 
-        .confirm-buttons {
+        .input-group input:focus {
+            outline: none;
+            border-color: #007aff;
+            background: white;
+        }
+
+        .modal-buttons {
             display: flex;
             gap: 12px;
             margin-top: 20px;
         }
 
-        .confirm-btn, .cancel-btn {
+        .modal-btn {
             flex: 1;
             padding: 12px;
             border-radius: 30px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
         }
 
-        .confirm-btn {
-            background: #ff3b30;
+        .modal-btn-primary {
+            background: #007aff;
             color: white;
             border: none;
         }
 
-        .cancel-btn {
+        .modal-btn-secondary {
             background: none;
             border: 1px solid #8e8e93;
             color: #8e8e93;
         }
 
-        /* Мобильная версия (кратко) */
+        .modal-btn-danger {
+            background: #ff3b30;
+            color: white;
+            border: none;
+        }
+
+        .switch-auth {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        .switch-auth button {
+            background: none;
+            border: none;
+            color: #007aff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #8e8e93;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+
+        /* Мобильная версия */
         @media (max-width: 768px) {
             .sidebar { display: none; }
             .main-content { margin-left: 0; padding: 20px 16px 100px; }
@@ -608,10 +649,6 @@
                 flex-shrink: 0;
             }
 
-            .floating-search-btn:active {
-                transform: scale(0.94);
-            }
-
             .mini-player {
                 position: fixed;
                 bottom: 100px;
@@ -684,6 +721,12 @@
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
                 border: 0.5px solid rgba(0, 0, 0, 0.05);
             }
+
+            .profile-avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 36px;
+            }
         }
 
         @media (min-width: 769px) {
@@ -728,12 +771,12 @@
         <div id="profileTab" style="display: none;">
             <div class="profile-tab">
                 <div class="profile-card">
-                    <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                    <div class="profile-avatar" id="profileAvatar">👤</div>
                     <div class="profile-name" id="profileName">Гость</div>
                     <div class="profile-email" id="profileEmail">Не авторизован</div>
                     <div class="profile-actions">
-                        <button class="profile-btn edit-btn" id="editProfileBtn"><i class="fas fa-pencil-alt"></i> Редактировать</button>
-                        <button class="profile-btn logout-confirm-btn" id="logoutConfirmBtn"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+                        <button class="profile-icon-btn" id="editProfileBtn" title="Редактировать профиль"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="profile-icon-btn" id="logoutConfirmBtn" title="Выйти из аккаунта"><i class="fas fa-sign-out-alt"></i></button>
                     </div>
                 </div>
             </div>
@@ -792,10 +835,52 @@
     </div>
 </div>
 
-<!-- Модалки (сокращены для краткости, полный набор) -->
-<div class="modal" id="editModal"><div class="modal-content"><h3>Редактировать профиль</h3><div class="input-group"><input type="text" id="editName" placeholder="Ваше имя"></div><button class="profile-btn edit-btn" id="saveEditBtn" style="width:100%">Сохранить</button><button class="cancel-btn" id="closeEditBtn" style="margin-top:12px">Отмена</button></div></div>
-<div class="modal" id="logoutModal"><div class="modal-content"><h3>Выход из аккаунта</h3><p>Вы уверены, что хотите выйти?</p><div class="confirm-buttons"><button class="confirm-btn" id="confirmLogoutBtn">Выйти</button><button class="cancel-btn" id="cancelLogoutBtn">Отмена</button></div></div></div>
-<div class="modal" id="authModal"><div class="modal-content"><i class="fas fa-music" style="font-size: 48px; color: #007aff;"></i><h3 id="modalTitle">Вход</h3><div id="authError" style="color:#ff3b30; font-size:12px; margin:10px 0; display:none;"></div><div id="loginForm"><div class="input-group"><input type="email" id="loginEmail" placeholder="Email"></div><div class="input-group"><input type="password" id="loginPassword" placeholder="Пароль"></div><button class="profile-btn edit-btn" id="loginBtn" style="width:100%">Войти</button></div><div id="registerForm" style="display:none"><div class="input-group"><input type="text" id="registerName" placeholder="Имя"></div><div class="input-group"><input type="email" id="registerEmail" placeholder="Email"></div><div class="input-group"><input type="password" id="registerPassword" placeholder="Пароль"></div><div class="input-group"><input type="password" id="registerConfirm" placeholder="Подтвердите пароль"></div><button class="profile-btn edit-btn" id="registerBtn" style="width:100%">Зарегистрироваться</button></div><div class="switch-auth" style="margin-top:16px"><span id="switchText">Нет аккаунта?</span><button id="switchBtn" style="background:none; border:none; color:#007aff">Зарегистрироваться</button></div><button class="cancel-btn" id="closeAuthBtn" style="margin-top:12px">Закрыть</button></div></div>
+<!-- Модальное окно редактирования -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <h3>Редактировать профиль</h3>
+        <div class="input-group"><label>Имя пользователя</label><input type="text" id="editName" placeholder="Ваше имя"></div>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-primary" id="saveEditBtn">Сохранить</button>
+            <button class="modal-btn modal-btn-secondary" id="closeEditBtn">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения выхода -->
+<div class="modal" id="logoutModal">
+    <div class="modal-content">
+        <h3>Выход из аккаунта</h3>
+        <p>Вы уверены, что хотите выйти? Все ваши избранные треки останутся сохранёнными.</p>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-danger" id="confirmLogoutBtn">Выйти</button>
+            <button class="modal-btn modal-btn-secondary" id="cancelLogoutBtn">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно авторизации -->
+<div class="modal" id="authModal">
+    <div class="modal-content">
+        <i class="fas fa-music" style="font-size: 48px; color: #007aff; margin-bottom: 12px;"></i>
+        <h3 id="modalTitle">Вход</h3>
+        <div id="authError" style="color:#ff3b30; font-size:12px; margin:10px 0; display:none;"></div>
+        <div id="loginForm">
+            <div class="input-group"><label>Email</label><input type="email" id="loginEmail" placeholder="example@mail.com"></div>
+            <div class="input-group"><label>Пароль</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+            <button class="modal-btn modal-btn-primary" id="loginBtn" style="width:100%">Войти</button>
+        </div>
+        <div id="registerForm" style="display:none">
+            <div class="input-group"><label>Имя</label><input type="text" id="registerName" placeholder="Как вас зовут?"></div>
+            <div class="input-group"><label>Email</label><input type="email" id="registerEmail" placeholder="example@mail.com"></div>
+            <div class="input-group"><label>Пароль</label><input type="password" id="registerPassword" placeholder="••••••••"></div>
+            <div class="input-group"><label>Подтвердите пароль</label><input type="password" id="registerConfirm" placeholder="••••••••"></div>
+            <button class="modal-btn modal-btn-primary" id="registerBtn" style="width:100%">Зарегистрироваться</button>
+        </div>
+        <div class="switch-auth"><span id="switchText">Нет аккаунта?</span> <button id="switchBtn">Зарегистрироваться</button></div>
+        <button class="close-modal" id="closeAuthBtn">Закрыть</button>
+    </div>
+</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -837,10 +922,9 @@
 
     let currentIndex = 0, isPlaying = false, audio = new Audio(), shuffleMode = false, repeatMode = 'none', searchQuery = '';
     let currentUser = null, favorites = new Set(), currentTab = 'search';
-    let preloadAudio = new Audio();  // для предзагрузки следующего трека
-    let nextPreloadIndex = -1;       // индекс предзагруженного трека
+    let preloadAudio = new Audio(), nextPreloadIndex = -1;
 
-    // DOM элементы (сокращённо)
+    // DOM
     const trackListEl = document.getElementById('trackList');
     const favoritesListEl = document.getElementById('favoritesList');
     const searchInput = document.getElementById('searchInput');
@@ -853,6 +937,7 @@
     const mobileSearchBtn = document.getElementById('mobileSearchBtn');
     const profileName = document.getElementById('profileName');
     const profileEmail = document.getElementById('profileEmail');
+    const profileAvatar = document.getElementById('profileAvatar');
     const editProfileBtn = document.getElementById('editProfileBtn');
     const logoutConfirmBtn = document.getElementById('logoutConfirmBtn');
     const editModal = document.getElementById('editModal');
@@ -879,10 +964,10 @@
     const durationSpan = document.getElementById('duration');
     const volumeSlider = document.getElementById('volumeSlider');
 
-    // ========== Предзагрузка следующего трека ==========
+    // Предзагрузка
     function preloadTrack(index) {
         if (index < 0 || index >= tracksData.length) return;
-        if (nextPreloadIndex === index && preloadAudio.src) return; // уже загружено
+        if (nextPreloadIndex === index && preloadAudio.src) return;
         const track = tracksData[index];
         if (!track) return;
         preloadAudio.src = `audio/${track.file}`;
@@ -890,7 +975,6 @@
         nextPreloadIndex = index;
     }
 
-    // Получить следующий индекс (с учётом shuffle и repeat)
     function getNextIndex() {
         if (shuffleMode) {
             let next;
@@ -904,32 +988,23 @@
         }
     }
 
-    // Загрузка трека с возможностью использовать предзагруженный
     function loadTrack(index, autoPlay = false) {
         if (index < 0) index = 0;
         if (index >= tracksData.length) index = 0;
         const wasPlaying = isPlaying;
         const currentVolume = volumeSlider.value;
-        
-        // Останавливаем текущий
         if (audio) { audio.pause(); audio.currentTime = 0; }
-        
-        // Используем предзагруженный, если он подходит
         if (nextPreloadIndex === index && preloadAudio.src) {
             audio = preloadAudio;
-            preloadAudio = new Audio(); // создаём новый для следующей предзагрузки
+            preloadAudio = new Audio();
             nextPreloadIndex = -1;
         } else {
             audio = new Audio(`audio/${tracksData[index].file}`);
         }
-        
         audio.volume = currentVolume;
         currentIndex = index;
         const track = tracksData[currentIndex];
-        
-        audio.addEventListener('loadedmetadata', () => {
-            durationSpan.textContent = formatDuration(audio.duration);
-        });
+        audio.addEventListener('loadedmetadata', () => durationSpan.textContent = formatDuration(audio.duration));
         audio.addEventListener('timeupdate', () => {
             if (audio.duration) {
                 progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
@@ -951,15 +1026,12 @@
                 }
             }
         });
-        
         updatePlayerInfo(track);
         showPlayer();
-        
         if (autoPlay || wasPlaying) {
             audio.play().then(() => {
                 isPlaying = true;
                 updatePlayBtn();
-                // После начала воспроизведения предзагружаем следующий трек
                 const nextIdx = getNextIndex();
                 if (nextIdx !== currentIndex) preloadTrack(nextIdx);
             }).catch(() => {
@@ -969,15 +1041,12 @@
         } else {
             isPlaying = false;
             updatePlayBtn();
-            // Даже если не играем, всё равно предзагружаем следующий
             const nextIdx = getNextIndex();
             if (nextIdx !== currentIndex) preloadTrack(nextIdx);
         }
-        
         renderTrackList();
     }
 
-    // Обновление интерфейса плеера
     function updatePlayerInfo(track) {
         const title = track.title, artist = track.artist;
         if (window.innerWidth <= 768) {
@@ -1032,7 +1101,7 @@
         else desktopPlayer.classList.add('hidden');
     }
 
-    // Остальные функции (рендер списка, избранное, авторизация) аналогичны предыдущей версии
+    // Рендер списка
     function renderTrackList() {
         const filtered = tracksData.filter(t => !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.artist.toLowerCase().includes(searchQuery.toLowerCase()));
         if (!filtered.length) { trackListEl.innerHTML = '<div class="empty-state">Ничего не найдено</div>'; return; }
@@ -1085,11 +1154,14 @@
 
     function updateUI() {
         if (currentUser) {
-            profileName.textContent = currentUser.displayName || currentUser.email.split('@')[0];
+            const displayName = currentUser.displayName || currentUser.email.split('@')[0];
+            profileName.textContent = displayName;
             profileEmail.textContent = currentUser.email;
+            profileAvatar.textContent = displayName.charAt(0).toUpperCase();
         } else {
             profileName.textContent = 'Гость';
             profileEmail.textContent = 'Не авторизован';
+            profileAvatar.textContent = '👤';
         }
     }
 
@@ -1101,7 +1173,6 @@
         if (repeatMode === 'none') { repeatMode = 'all'; playerRepeat.classList.add('active'); playerRepeat.innerHTML = '<i class="fas fa-repeat"></i>'; }
         else if (repeatMode === 'all') { repeatMode = 'one'; playerRepeat.innerHTML = '<i class="fas fa-repeat-1"></i>'; }
         else { repeatMode = 'none'; playerRepeat.classList.remove('active'); playerRepeat.innerHTML = '<i class="fas fa-repeat"></i>'; }
-        // Обновляем предзагрузку при смене режима
         const nextIdx = getNextIndex();
         if (nextIdx !== currentIndex) preloadTrack(nextIdx);
     }
@@ -1120,20 +1191,82 @@
         if (tabId === 'profile' && !currentUser) showAuthModal();
     }
 
-    // Авторизация (сокращённо)
+    // Модалки
     function showAuthModal() { authModal.classList.add('active'); }
     function hideAuthModal() { authModal.classList.remove('active'); }
-    async function handleLogin() { const email = document.getElementById('loginEmail').value, pass = document.getElementById('loginPassword').value; if (!email || !pass) return; try { const res = await window.signInWithEmailAndPassword(window.auth, email, pass); currentUser = res.user; updateUI(); hideAuthModal(); await loadFavorites(); } catch(e) { document.getElementById('authError').style.display='block'; document.getElementById('authError').textContent='Неверный email или пароль'; } }
-    async function handleRegister() { const name = document.getElementById('registerName').value, email = document.getElementById('registerEmail').value, pass = document.getElementById('registerPassword').value, conf = document.getElementById('registerConfirm').value; if (!name || !email || !pass) return; if (pass !== conf) return; try { const res = await window.createUserWithEmailAndPassword(window.auth, email, pass); await window.updateProfile(res.user, { displayName: name }); await window.setDoc(window.doc(window.db, 'users', res.user.uid), { displayName: name, email, favorites: [] }); currentUser = res.user; updateUI(); hideAuthModal(); await loadFavorites(); } catch(e) { document.getElementById('authError').style.display='block'; document.getElementById('authError').textContent='Ошибка регистрации'; } }
-    async function handleSaveName() { const newName = document.getElementById('editName').value.trim(); if (newName && currentUser) { await window.updateProfile(currentUser, { displayName: newName }); await window.setDoc(window.doc(window.db, 'users', currentUser.uid), { displayName: newName }, { merge: true }); updateUI(); } hideEditModal(); }
-    async function handleLogout() { await window.signOut(window.auth); currentUser = null; favorites.clear(); updateUI(); hideLogoutModal(); renderTrackList(); if (currentTab === 'favorites') renderFavoritesList(); hidePlayer(); }
     function showEditModal() { if (currentUser) { document.getElementById('editName').value = currentUser.displayName || ''; editModal.classList.add('active'); } }
     function hideEditModal() { editModal.classList.remove('active'); }
     function showLogoutConfirm() { if (currentUser) logoutModal.classList.add('active'); }
     function hideLogoutModal() { logoutModal.classList.remove('active'); }
 
+    async function handleLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        if (!email || !password) { document.getElementById('authError').textContent = 'Заполните все поля'; document.getElementById('authError').style.display = 'block'; return; }
+        try {
+            const res = await window.signInWithEmailAndPassword(window.auth, email, password);
+            currentUser = res.user;
+            updateUI();
+            hideAuthModal();
+            await loadFavorites();
+        } catch (e) {
+            document.getElementById('authError').textContent = 'Неверный email или пароль';
+            document.getElementById('authError').style.display = 'block';
+        }
+    }
+
+    async function handleRegister() {
+        const name = document.getElementById('registerName').value.trim();
+        const email = document.getElementById('registerEmail').value.trim();
+        const password = document.getElementById('registerPassword').value;
+        const confirm = document.getElementById('registerConfirm').value;
+        if (!name || !email || !password) { document.getElementById('authError').textContent = 'Заполните все поля'; document.getElementById('authError').style.display = 'block'; return; }
+        if (password !== confirm) { document.getElementById('authError').textContent = 'Пароли не совпадают'; document.getElementById('authError').style.display = 'block'; return; }
+        if (password.length < 6) { document.getElementById('authError').textContent = 'Пароль минимум 6 символов'; document.getElementById('authError').style.display = 'block'; return; }
+        try {
+            const res = await window.createUserWithEmailAndPassword(window.auth, email, password);
+            await window.updateProfile(res.user, { displayName: name });
+            await window.setDoc(window.doc(window.db, 'users', res.user.uid), { displayName: name, email, favorites: [] });
+            currentUser = res.user;
+            updateUI();
+            hideAuthModal();
+            await loadFavorites();
+        } catch (e) {
+            document.getElementById('authError').textContent = 'Email уже зарегистрирован';
+            document.getElementById('authError').style.display = 'block';
+        }
+    }
+
+    async function handleSaveName() {
+        const newName = document.getElementById('editName').value.trim();
+        if (newName && currentUser) {
+            await window.updateProfile(currentUser, { displayName: newName });
+            await window.setDoc(window.doc(window.db, 'users', currentUser.uid), { displayName: newName }, { merge: true });
+            updateUI();
+        }
+        hideEditModal();
+    }
+
+    async function handleLogout() {
+        await window.signOut(window.auth);
+        currentUser = null;
+        favorites.clear();
+        updateUI();
+        hideLogoutModal();
+        renderTrackList();
+        if (currentTab === 'favorites') renderFavoritesList();
+        hidePlayer();
+    }
+
     let isLoginMode = true;
-    document.getElementById('switchBtn').onclick = () => { isLoginMode = !isLoginMode; document.getElementById('loginForm').style.display = isLoginMode ? 'block' : 'none'; document.getElementById('registerForm').style.display = isLoginMode ? 'none' : 'block'; document.getElementById('modalTitle').textContent = isLoginMode ? 'Вход' : 'Регистрация'; document.getElementById('switchText').textContent = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?'; document.getElementById('switchBtn').textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти'; };
+    document.getElementById('switchBtn').onclick = () => {
+        isLoginMode = !isLoginMode;
+        document.getElementById('loginForm').style.display = isLoginMode ? 'block' : 'none';
+        document.getElementById('registerForm').style.display = isLoginMode ? 'none' : 'block';
+        document.getElementById('modalTitle').textContent = isLoginMode ? 'Вход' : 'Регистрация';
+        document.getElementById('switchText').textContent = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?';
+        document.getElementById('switchBtn').textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
+    };
 
     function init() {
         renderTrackList();
