@@ -216,23 +216,57 @@
             margin-top: 4px;
         }
 
+        /* Анимированная кнопка избранного */
         .favorite-btn {
             background: none;
             border: none;
             cursor: pointer;
             font-size: 22px;
             padding: 8px;
-            transition: transform 0.1s;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 40px;
+        }
+
+        .favorite-btn i {
+            transition: all 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
         }
 
         .favorite-btn i {
             color: #c6c6c8;
             -webkit-text-stroke: 1px #8e8e93;
+            text-stroke: 1px #8e8e93;
         }
 
         .favorite-btn.active i {
-            color: #007aff;
+            color: #ff3b30;
             -webkit-text-stroke: 0;
+            text-stroke: 0;
+            animation: heartBeat 0.3s ease-in-out;
+        }
+
+        /* Анимация пульсации сердечка */
+        @keyframes heartBeat {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.25);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Анимация при нажатии */
+        .favorite-btn:active {
+            transform: scale(0.92);
+        }
+
+        .favorite-btn:active i {
+            animation: none;
         }
 
         .empty-state {
@@ -372,7 +406,7 @@
             cursor: pointer;
         }
 
-        /* Профиль — улучшенный дизайн */
+        /* Профиль */
         .profile-tab {
             max-width: 500px;
             margin: 0 auto;
@@ -440,7 +474,7 @@
             transform: scale(1.05);
         }
 
-        /* Модальные окна (красивый дизайн) */
+        /* Модальные окна */
         .modal {
             display: none;
             position: fixed;
@@ -479,22 +513,9 @@
             margin-bottom: 8px;
         }
 
-        .modal-content p {
-            color: #8e8e93;
-            margin-bottom: 24px;
-        }
-
         .input-group {
             margin-bottom: 16px;
             text-align: left;
-        }
-
-        .input-group label {
-            font-size: 13px;
-            font-weight: 500;
-            color: #8e8e93;
-            margin-bottom: 6px;
-            display: block;
         }
 
         .input-group input {
@@ -504,13 +525,11 @@
             border-radius: 12px;
             font-size: 16px;
             background: #f9f9fb;
-            transition: all 0.2s;
         }
 
         .input-group input:focus {
             outline: none;
             border-color: #007aff;
-            background: white;
         }
 
         .modal-buttons {
@@ -835,7 +854,7 @@
     </div>
 </div>
 
-<!-- Модальное окно редактирования -->
+<!-- Модальные окна -->
 <div class="modal" id="editModal">
     <div class="modal-content">
         <h3>Редактировать профиль</h3>
@@ -847,7 +866,6 @@
     </div>
 </div>
 
-<!-- Модальное окно подтверждения выхода -->
 <div class="modal" id="logoutModal">
     <div class="modal-content">
         <h3>Выход из аккаунта</h3>
@@ -859,7 +877,6 @@
     </div>
 </div>
 
-<!-- Модальное окно авторизации -->
 <div class="modal" id="authModal">
     <div class="modal-content">
         <i class="fas fa-music" style="font-size: 48px; color: #007aff; margin-bottom: 12px;"></i>
@@ -924,7 +941,7 @@
     let currentUser = null, favorites = new Set(), currentTab = 'search';
     let preloadAudio = new Audio(), nextPreloadIndex = -1;
 
-    // DOM
+    // DOM элементы
     const trackListEl = document.getElementById('trackList');
     const favoritesListEl = document.getElementById('favoritesList');
     const searchInput = document.getElementById('searchInput');
@@ -964,7 +981,6 @@
     const durationSpan = document.getElementById('duration');
     const volumeSlider = document.getElementById('volumeSlider');
 
-    // Предзагрузка
     function preloadTrack(index) {
         if (index < 0 || index >= tracksData.length) return;
         if (nextPreloadIndex === index && preloadAudio.src) return;
@@ -1101,7 +1117,6 @@
         else desktopPlayer.classList.add('hidden');
     }
 
-    // Рендер списка
     function renderTrackList() {
         const filtered = tracksData.filter(t => !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.artist.toLowerCase().includes(searchQuery.toLowerCase()));
         if (!filtered.length) { trackListEl.innerHTML = '<div class="empty-state">Ничего не найдено</div>'; return; }
@@ -1139,8 +1154,16 @@
                 e.stopPropagation();
                 const id = parseInt(btn.dataset.id);
                 if (!currentUser) { showAuthModal(); return; }
-                if (favorites.has(id)) favorites.delete(id);
-                else favorites.add(id);
+                
+                // Добавляем анимацию
+                btn.style.transform = 'scale(1.2)';
+                setTimeout(() => { btn.style.transform = ''; }, 150);
+                
+                if (favorites.has(id)) {
+                    favorites.delete(id);
+                } else {
+                    favorites.add(id);
+                }
                 await saveFavorites();
                 renderTrackList();
                 if (currentTab === 'favorites') renderFavoritesList();
