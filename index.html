@@ -122,7 +122,7 @@
         .main-content {
             flex: 1;
             margin-left: 80px;
-            padding: 32px 40px 120px;
+            padding: 32px 40px 40px;
         }
 
         .center-header {
@@ -273,64 +273,56 @@
             border-radius: 24px;
         }
 
-        /* ПК Плеер */
+        /* ========== ПК ПЛЕЕР — встроенный, без "облачка" ========== */
         .desktop-player {
-            position: fixed;
-            bottom: 20px;
-            left: 100px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(20px);
-            border-radius: 60px;
-            padding: 12px 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-            transition: all 0.3s;
-            border: 0.5px solid rgba(255, 255, 255, 0.3);
+            background: white;
+            border-radius: 24px;
+            margin-top: 40px;
+            padding: 20px 28px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 0.5px solid rgba(0, 0, 0, 0.04);
         }
 
         .desktop-player.hidden {
-            transform: translateY(100px);
-            opacity: 0;
-            pointer-events: none;
+            display: none;
         }
 
         .player-container {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 24px;
             flex-wrap: wrap;
         }
 
         .player-info {
-            min-width: 180px;
+            min-width: 200px;
             flex: 1;
         }
 
         .player-title {
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 600;
         }
 
         .player-artist {
-            font-size: 12px;
+            font-size: 14px;
             color: #8e8e93;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         .player-controls {
             display: flex;
-            gap: 12px;
+            gap: 16px;
         }
 
         .player-btn {
             background: none;
             border: none;
             cursor: pointer;
-            width: 44px;
-            height: 44px;
-            border-radius: 44px;
-            font-size: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 48px;
+            font-size: 22px;
             color: #1c1c1e;
             transition: all 0.2s;
         }
@@ -343,20 +335,25 @@
         .play-btn {
             background: #007aff;
             color: white;
-            width: 52px;
-            height: 52px;
-            font-size: 22px;
+            width: 56px;
+            height: 56px;
+            font-size: 24px;
+        }
+
+        .play-btn:hover {
+            background: #005fc4;
+            color: white;
         }
 
         .progress-area {
             flex: 2;
-            min-width: 160px;
+            min-width: 200px;
         }
 
         .progress-bar-bg {
             background: rgba(0, 0, 0, 0.1);
             border-radius: 100px;
-            height: 4px;
+            height: 5px;
             cursor: pointer;
         }
 
@@ -370,22 +367,22 @@
         .time-info {
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
+            font-size: 12px;
             color: #8e8e93;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
         .volume-control {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(0, 0, 0, 0.03);
-            padding: 4px 12px;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.02);
+            padding: 6px 14px;
             border-radius: 40px;
         }
 
         .volume-slider {
-            width: 70px;
+            width: 80px;
             height: 3px;
             -webkit-appearance: none;
             background: rgba(0, 0, 0, 0.2);
@@ -394,10 +391,10 @@
 
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             background: #007aff;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
         }
 
@@ -536,12 +533,12 @@
             color: #8e8e93;
         }
 
-        /* ========== МОБИЛЬНАЯ ВЕРСИЯ (обновлённая) ========== */
+        /* ========== МОБИЛЬНАЯ ВЕРСИЯ (сильное закругление) ========== */
         @media (max-width: 768px) {
             .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 20px 16px 140px; }
+            .main-content { margin-left: 0; padding: 20px 16px 40px; }
             .center-header h1 { font-size: 36px; }
-            .desktop-player { display: none; }
+            .desktop-player { margin-top: 30px; padding: 16px; }
 
             /* Контейнер для панели и кнопки поиска */
             .mobile-bottom-container {
@@ -556,11 +553,11 @@
                 z-index: 100;
             }
 
-            /* Панель навигации (слегка круглая) */
+            /* Панель навигации — сильное закругление */
             .mobile-tab-bar {
                 background: rgba(255, 255, 255, 0.94);
                 backdrop-filter: blur(20px);
-                border-radius: 28px;
+                border-radius: 40px;   /* сильное закругление */
                 padding: 8px 12px;
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
                 border: 0.5px solid rgba(255, 255, 255, 0.3);
@@ -584,7 +581,7 @@
                 cursor: pointer;
                 color: #8e8e93;
                 font-size: 22px;
-                border-radius: 20px;   /* прямоугольное с сильным закруглением */
+                border-radius: 30px;   /* сильное закругление */
                 transition: all 0.2s;
                 background: transparent;
             }
@@ -599,11 +596,11 @@
                 background: rgba(0, 122, 255, 0.12);
             }
 
-            /* Кнопка поиска — такой же стиль, как панель */
+            /* Кнопка поиска — такой же стиль, сильное закругление */
             .floating-search-btn {
                 background: rgba(255, 255, 255, 0.94);
                 backdrop-filter: blur(20px);
-                border-radius: 28px;
+                border-radius: 40px;
                 width: 64px;
                 height: 64px;
                 display: flex;
@@ -625,7 +622,7 @@
             /* Мини-плеер */
             .mini-player {
                 position: fixed;
-                bottom: 96px;
+                bottom: 100px;
                 left: 16px;
                 right: 16px;
                 background: rgba(255, 255, 255, 0.92);
@@ -749,10 +746,35 @@
                 </div>
             </div>
         </div>
+
+        <!-- ПК Плеер — встроен в основной поток -->
+        <div class="desktop-player hidden" id="desktopPlayer">
+            <div class="player-container">
+                <div class="player-info">
+                    <div class="player-title" id="desktopTitle">Выберите трек</div>
+                    <div class="player-artist" id="desktopArtist">—</div>
+                </div>
+                <div class="player-controls">
+                    <button class="player-btn" id="playerPrev"><i class="fas fa-backward-step"></i></button>
+                    <button class="player-btn play-btn" id="playerPlay"><i class="fas fa-play"></i></button>
+                    <button class="player-btn" id="playerNext"><i class="fas fa-forward-step"></i></button>
+                    <button class="player-btn" id="playerShuffle"><i class="fas fa-random"></i></button>
+                    <button class="player-btn" id="playerRepeat"><i class="fas fa-repeat"></i></button>
+                </div>
+                <div class="progress-area">
+                    <div class="progress-bar-bg" id="progressBarBg"><div class="progress-fill" id="progressFill"></div></div>
+                    <div class="time-info"><span id="currentTime">0:00</span><span id="duration">0:00</span></div>
+                </div>
+                <div class="volume-control">
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="0.75">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Мобильная навигация и кнопка поиска (объединены в контейнер) -->
+<!-- Мобильная навигация и кнопка поиска -->
 <div class="mobile-bottom-container">
     <div class="mobile-tab-bar">
         <div class="tab-bar-items">
@@ -774,31 +796,6 @@
         <div class="mini-controls">
             <button class="mini-ctrl mini-play" id="miniPlay"><i class="fas fa-play"></i></button>
             <button class="mini-ctrl" id="miniNext"><i class="fas fa-forward-step"></i></button>
-        </div>
-    </div>
-</div>
-
-<!-- ПК Плеер -->
-<div class="desktop-player hidden" id="desktopPlayer">
-    <div class="player-container">
-        <div class="player-info">
-            <div class="player-title" id="desktopTitle">Выберите трек</div>
-            <div class="player-artist" id="desktopArtist">—</div>
-        </div>
-        <div class="player-controls">
-            <button class="player-btn" id="playerPrev"><i class="fas fa-backward-step"></i></button>
-            <button class="player-btn play-btn" id="playerPlay"><i class="fas fa-play"></i></button>
-            <button class="player-btn" id="playerNext"><i class="fas fa-forward-step"></i></button>
-            <button class="player-btn" id="playerShuffle"><i class="fas fa-random"></i></button>
-            <button class="player-btn" id="playerRepeat"><i class="fas fa-repeat"></i></button>
-        </div>
-        <div class="progress-area">
-            <div class="progress-bar-bg" id="progressBarBg"><div class="progress-fill" id="progressFill"></div></div>
-            <div class="time-info"><span id="currentTime">0:00</span><span id="duration">0:00</span></div>
-        </div>
-        <div class="volume-control">
-            <i class="fas fa-volume-up"></i>
-            <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="0.75">
         </div>
     </div>
 </div>
@@ -973,13 +970,31 @@
         }
     }
 
-    function showPlayer() { (window.innerWidth <= 768 ? miniPlayer : desktopPlayer).classList.remove('hidden'); }
-    function hidePlayer() { (window.innerWidth <= 768 ? miniPlayer : desktopPlayer).classList.add('hidden'); }
+    function showPlayer() {
+        if (window.innerWidth <= 768) {
+            miniPlayer.classList.remove('hidden');
+        } else {
+            desktopPlayer.classList.remove('hidden');
+        }
+    }
+
+    function hidePlayer() {
+        if (window.innerWidth <= 768) {
+            miniPlayer.classList.add('hidden');
+        } else {
+            desktopPlayer.classList.add('hidden');
+        }
+    }
 
     function updatePlayerInfo(track) {
         const title = track.title, artist = track.artist;
-        if (window.innerWidth <= 768) { miniTitle.textContent = title; miniArtist.textContent = artist; }
-        else { desktopTitle.textContent = title; desktopArtist.textContent = artist; }
+        if (window.innerWidth <= 768) {
+            miniTitle.textContent = title;
+            miniArtist.textContent = artist;
+        } else {
+            desktopTitle.textContent = title;
+            desktopArtist.textContent = artist;
+        }
     }
 
     function loadTrack(idx) {
