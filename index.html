@@ -26,36 +26,56 @@
             padding: 32px 24px 140px;
         }
 
+        /* ========== НОВЫЙ ЦЕНТРАЛЬНЫЙ ХЕДЕР ========== */
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            gap: 16px;
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 20px 0;
         }
 
         .logo h1 {
-            font-size: 38px;
-            font-weight: 700;
-            letter-spacing: -0.8px;
-            background: linear-gradient(135deg, #1c1c1e, #48484a);
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #1c1c1e, #007aff, #5856d6, #1c1c1e);
+            background-size: 300% 300%;
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+            animation: shimmer 6s ease infinite;
+            margin-bottom: 8px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .logo p {
-            font-size: 13px;
+            font-size: 14px;
             color: #8e8e93;
-            margin-top: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Счетчик треков теперь под хедером, справа */
+        .stats-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
         }
 
         .stats {
             font-size: 14px;
             color: #8e8e93;
             background: rgba(120, 120, 128, 0.08);
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 30px;
             font-weight: 500;
         }
@@ -355,23 +375,20 @@
             cursor: pointer;
         }
 
-        /* ========== ДЕСКТОПНАЯ ВЕРСИЯ (громкость видна) ========== */
-        @media (min-width: 769px) {
-            .volume-control-mobile {
-                display: flex;
-            }
-        }
-
-        /* ========== МОБИЛЬНАЯ ВЕРСИЯ (громкость скрыта, всё компактно) ========== */
+        /* ========== МОБИЛЬНАЯ ВЕРСИЯ ========== */
         @media (max-width: 768px) {
             .container {
                 padding: 20px 16px 120px;
             }
+            
             .logo h1 {
-                font-size: 28px;
+                font-size: 36px;
             }
             
-            /* Нижний плеер на мобильных — компактная версия */
+            .stats-wrapper {
+                margin-bottom: 16px;
+            }
+            
             .bottom-player {
                 padding: 12px 16px;
             }
@@ -416,7 +433,6 @@
                 font-size: 24px;
             }
             
-            /* Скрываем громкость на мобильных */
             .volume-control {
                 display: none !important;
             }
@@ -444,11 +460,16 @@
 </head>
 <body>
 <div class="container">
+    <!-- Центральный хедер с логотипом -->
     <div class="header">
         <div class="logo">
             <h1>QQMusic</h1>
-            <p></p>
+            <p>высокое качество звука</p>
         </div>
+    </div>
+
+    <!-- Счетчик треков справа под хедером -->
+    <div class="stats-wrapper">
         <div class="stats" id="trackCount">0 треков</div>
     </div>
 
