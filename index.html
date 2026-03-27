@@ -241,13 +241,17 @@
             align-items: center;
             gap: 16px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             border: 0.5px solid rgba(0, 0, 0, 0.04);
         }
 
         .track-item:hover {
             background: #f9f9fb;
             transform: translateX(4px);
+        }
+
+        .track-item:active {
+            transform: scale(0.99);
         }
 
         .track-item.active {
@@ -288,7 +292,7 @@
             color: #8e8e93;
         }
 
-        /* Сердечко - белое с серой обводкой */
+        /* Сердечко */
         .favorite-btn {
             background: none;
             border: none;
@@ -302,9 +306,9 @@
         }
 
         .favorite-btn i {
-            color: white;
-            -webkit-text-stroke: 1.5px #8e8e93;
-            text-stroke: 1.5px #8e8e93;
+            color: #c6c6c8;
+            -webkit-text-stroke: 1px #8e8e93;
+            text-stroke: 1px #8e8e93;
             transition: all 0.2s;
         }
 
@@ -408,11 +412,6 @@
             font-size: 22px;
         }
 
-        .play-btn:hover {
-            background: #005fc4;
-            color: white;
-        }
-
         .progress-area {
             flex: 2;
             min-width: 160px;
@@ -494,7 +493,15 @@
 
         .settings-content h2 {
             font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .user-email-display {
+            color: #8e8e93;
+            font-size: 14px;
             margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 0.5px solid rgba(0,0,0,0.08);
         }
 
         .settings-option {
@@ -537,12 +544,32 @@
             margin-bottom: 12px;
         }
 
+        .logout-btn {
+            background: none;
+            border: 1px solid #ff3b30;
+            color: #ff3b30;
+            border-radius: 30px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #ff3b30;
+            color: white;
+        }
+
         .close-settings {
             background: none;
             border: none;
             color: #8e8e93;
             cursor: pointer;
             font-size: 14px;
+            margin-top: 16px;
         }
 
         /* Модальное окно авторизации */
@@ -739,7 +766,6 @@
 </head>
 <body>
 <div class="app-layout">
-    <!-- Левая панель только с иконками -->
     <div class="sidebar">
         <div class="sidebar-nav">
             <div class="nav-item" data-tab="home"><i class="fas fa-home"></i></div>
@@ -817,21 +843,20 @@
     </div>
 </div>
 
-<!-- Модальное окно настроек -->
 <div class="settings-modal" id="settingsModal">
     <div class="settings-content">
-        <h2>Настройки профиля</h2>
+        <h2>Профиль</h2>
+        <div class="user-email-display" id="userEmailDisplay">user@example.com</div>
         <div class="settings-option">
             <label>Имя пользователя</label>
             <input type="text" id="userNameInput" placeholder="Ваше имя">
         </div>
         <button class="save-settings" id="saveSettingsBtn">Сохранить</button>
+        <button class="logout-btn" id="logoutBtn">Выйти из аккаунта</button>
         <button class="close-settings" id="closeSettingsBtn">Закрыть</button>
-        <button class="close-settings" id="logoutBtn" style="color: #ff3b30; margin-top: 16px;">Выйти из аккаунта</button>
     </div>
 </div>
 
-<!-- Модальное окно авторизации -->
 <div class="auth-modal" id="authModal">
     <div class="auth-content">
         <i class="fas fa-music" style="font-size: 48px; color: #007aff; margin-bottom: 16px;"></i>
@@ -896,6 +921,7 @@
     const pcAccountIcon = document.getElementById('pcAccountIcon');
     const settingsModal = document.getElementById('settingsModal');
     const userNameInput = document.getElementById('userNameInput');
+    const userEmailDisplay = document.getElementById('userEmailDisplay');
     const saveSettingsBtn = document.getElementById('saveSettingsBtn');
     const closeSettingsBtn = document.getElementById('closeSettingsBtn');
     const logoutBtn = document.getElementById('logoutBtn');
@@ -911,10 +937,12 @@
         searchTab.style.display = tabId === 'search' ? 'block' : 'none';
         favoritesTab.style.display = tabId === 'favorites' ? 'block' : 'none';
         navItems.forEach(item => {
-            if (item.dataset.tab === tabId) item.classList.add('active');
+            if (item.dataset.tab === tabId || (tabId === 'account' && item.dataset.tab === 'account')) 
+                item.classList.add('active');
             else item.classList.remove('active');
         });
         if (tabId === 'favorites') renderFavoritesList();
+        if (tabId === 'account' && window.innerWidth <= 768) showAuthModal();
     }
 
     function renderFavoritesList() {
@@ -943,7 +971,7 @@
             el.addEventListener('click', (e) => {
                 if (e.target.closest('.favorite-btn')) return;
                 const idx = parseInt(el.dataset.index);
-                if (!isNaN(idx) && idx !== currentIndex) {
+                if (!isNaN(idx)) {
                     currentIndex = idx;
                     loadTrack(currentIndex);
                     if (!isPlaying) togglePlay();
@@ -955,6 +983,12 @@
                 e.stopPropagation();
                 const trackId = parseInt(btn.dataset.id);
                 await toggleFavorite(trackId);
+                // Обновляем внешний вид кнопки
+                if (favorites.has(trackId)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
             });
         });
     }
@@ -984,12 +1018,16 @@
     }
 
     async function toggleFavorite(trackId) {
-        if (!currentUser) { showAuthModal(); return; }
-        if (favorites.has(trackId)) favorites.delete(trackId);
-        else favorites.add(trackId);
+        if (!currentUser) { showAuthModal(); return false; }
+        if (favorites.has(trackId)) {
+            favorites.delete(trackId);
+        } else {
+            favorites.add(trackId);
+        }
         await saveFavorites();
         renderTrackList();
         if (currentTab === 'favorites') renderFavoritesList();
+        return true;
     }
 
     async function saveFavorites() {
@@ -1008,13 +1046,15 @@
     }
 
     function updateUserUI(user) {
-        const icon = pcAccountIcon.querySelector('i');
+        const icon = pcAccountIcon;
         if (user) {
             const name = user.displayName || user.email.split('@')[0];
             const initial = name.charAt(0).toUpperCase();
-            pcAccountIcon.innerHTML = `<div class="account-avatar">${initial}</div>`;
+            icon.innerHTML = `<div class="account-avatar">${initial}</div>`;
+            if (userEmailDisplay) userEmailDisplay.textContent = user.email;
+            if (userNameInput) userNameInput.value = user.displayName || '';
         } else {
-            pcAccountIcon.innerHTML = `<i class="fas fa-user-circle"></i>`;
+            icon.innerHTML = `<i class="fas fa-user-circle"></i>`;
         }
     }
 
@@ -1091,8 +1131,11 @@
 
     function showSettingsModal() {
         if (currentUser) {
-            userNameInput.value = currentUser.displayName || '';
+            if (userEmailDisplay) userEmailDisplay.textContent = currentUser.email;
+            if (userNameInput) userNameInput.value = currentUser.displayName || '';
             settingsModal.classList.add('active');
+        } else {
+            showAuthModal();
         }
     }
     function hideSettingsModal() { settingsModal.classList.remove('active'); }
