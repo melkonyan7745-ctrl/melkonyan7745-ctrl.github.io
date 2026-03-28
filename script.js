@@ -81,7 +81,7 @@ const currentTimeSpan = document.getElementById('currentTime');
 const durationSpan = document.getElementById('duration');
 const volumeSlider = document.getElementById('volumeSlider');
 
-// ========== ПОЛНОЭКРАННЫЙ ПЛЕЕР (ДОБАВЛЕНО) ==========
+// ========== ПОЛНОЭКРАННЫЙ ПЛЕЕР ==========
 const fullscreenPlayer = document.getElementById('fullscreenPlayer');
 const fullscreenTitle = document.getElementById('fullscreenTitle');
 const fullscreenArtist = document.getElementById('fullscreenArtist');
@@ -211,21 +211,6 @@ const originalUpdateProgress = function() {
     }
 };
 
-// Переопределяем обработчик времени
-const originalTimeUpdate = (audioElem) => {
-    audioElem.addEventListener('timeupdate', () => {
-        if (audioElem.duration) {
-            const percent = (audioElem.currentTime / audioElem.duration) * 100;
-            progressFill.style.width = `${percent}%`;
-            currentTimeSpan.textContent = formatDuration(audioElem.currentTime);
-            if (fullscreenPlayer.classList.contains('open')) {
-                fullscreenProgressFill.style.width = `${percent}%`;
-                fullscreenCurrentTime.textContent = formatDuration(audioElem.currentTime);
-            }
-        }
-    });
-};
-
 // Подключаем события полноэкранного плеера
 if (fullscreenPlay) fullscreenPlay.addEventListener('click', fullscreenTogglePlay);
 if (fullscreenPrev) fullscreenPrev.addEventListener('click', fullscreenPrevTrack);
@@ -233,7 +218,17 @@ if (fullscreenNext) fullscreenNext.addEventListener('click', fullscreenNextTrack
 if (fullscreenRepeat) fullscreenRepeat.addEventListener('click', fullscreenToggleRepeat);
 if (fullscreenProgressBar) fullscreenProgressBar.addEventListener('click', fullscreenSeek);
 if (closeFullscreenBtn) closeFullscreenBtn.addEventListener('click', closeFullscreenPlayer);
-if (miniPlayer) miniPlayer.addEventListener('click', openFullscreenPlayer);
+
+// ========== ИСПРАВЛЕНИЕ: открытие полноэкранного плеера только при клике вне кнопок ==========
+if (miniPlayer) {
+    miniPlayer.addEventListener('click', (e) => {
+        // Если кликнули на кнопку управления — не открываем полноэкранный плеер
+        if (e.target.closest('.mini-ctrl')) {
+            return;
+        }
+        openFullscreenPlayer();
+    });
+}
 
 // ========== СТАТИСТИКА ==========
 function loadStats() {
@@ -715,7 +710,8 @@ function init() {
     if (tracksData.length) preloadTrack(0);
     renderHomeStats();
 }
-// ========== ДОБАВЛЯЕМ СВАЙП ДЛЯ ЗАКРЫТИЯ ==========
+
+// ========== СВАЙП ДЛЯ ЗАКРЫТИЯ ==========
 let touchStartY = 0;
 let touchEndY = 0;
 
@@ -729,16 +725,13 @@ function handleTouchMove(e) {
 
 function handleTouchEnd() {
     if (touchStartY - touchEndY > 50) {
-        // Свайп вверх — ничего не делаем
         return;
     }
     if (touchEndY - touchStartY > 50) {
-        // Свайп вниз — закрываем
         closeFullscreenPlayer();
     }
 }
 
-// Добавляем обработчики свайпа
 if (fullscreenPlayer) {
     fullscreenPlayer.addEventListener('touchstart', handleTouchStart);
     fullscreenPlayer.addEventListener('touchmove', handleTouchMove);
