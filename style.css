@@ -740,242 +740,6 @@ body.dark .input-group input {
     cursor: pointer;
 }
 
-/* ========== МОБИЛЬНАЯ ВЕРСИЯ ========== */
-@media (max-width: 768px) {
-    .sidebar { display: none; }
-    .main-content { margin-left: 0; padding: 20px 16px 100px; }
-    .center-header h1 { font-size: 36px; }
-    .desktop-player { display: none; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .welcome-title { font-size: 24px; }
-    .welcome-title i { font-size: 28px; }
-
-    .track-list {
-        max-height: calc(100vh - 280px);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .mobile-bottom-container {
-        position: fixed;
-        bottom: 20px;
-        left: 16px;
-        right: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        z-index: 100;
-    }
-
-    .mobile-tab-bar {
-        background: rgba(255, 255, 255, 0.94);
-        backdrop-filter: blur(20px);
-        border-radius: 40px;
-        padding: 8px 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        border: 0.5px solid rgba(255, 255, 255, 0.3);
-        display: inline-flex;
-        flex: 1;
-    }
-
-    body.dark .mobile-tab-bar {
-        background: rgba(28, 28, 30, 0.94);
-        border: 0.5px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .tab-bar-items {
-        display: flex;
-        gap: 8px;
-        width: 100%;
-        justify-content: space-around;
-    }
-
-    .tab-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        padding: 8px 16px;
-        cursor: pointer;
-        color: #8e8e93;
-        font-size: 22px;
-        border-radius: 30px;
-        transition: all 0.2s;
-        background: transparent;
-    }
-
-    .tab-item span {
-        font-size: 10px;
-        font-weight: 500;
-    }
-
-    .tab-item.active {
-        color: #007aff;
-        background: rgba(0, 122, 255, 0.12);
-    }
-
-    body.dark .tab-item.active {
-        background: rgba(0, 122, 255, 0.2);
-    }
-
-    .floating-search-btn {
-        background: rgba(255, 255, 255, 0.94);
-        backdrop-filter: blur(20px);
-        border-radius: 40px;
-        width: 64px;
-        height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        color: #8e8e93;
-        font-size: 26px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        border: 0.5px solid rgba(255, 255, 255, 0.3);
-        flex-shrink: 0;
-    }
-
-    body.dark .floating-search-btn {
-        background: rgba(28, 28, 30, 0.94);
-        border: 0.5px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .mini-player {
-        position: fixed;
-        bottom: 100px;
-        left: 16px;
-        right: 16px;
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(20px);
-        border-radius: 56px;
-        padding: 6px 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        z-index: 99;
-        transition: all 0.3s;
-        border: 0.5px solid rgba(255, 255, 255, 0.3);
-        cursor: pointer;
-    }
-
-    body.dark .mini-player {
-        background: rgba(28, 28, 30, 0.92);
-        border: 0.5px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .mini-player.hidden {
-        transform: translateY(100px);
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .mini-content {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .mini-info {
-        flex: 1;
-    }
-
-    .mini-title {
-        font-size: 14px;
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .mini-artist {
-        font-size: 11px;
-        color: #8e8e93;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .mini-controls {
-        display: flex;
-        gap: 6px;
-    }
-
-    .mini-ctrl {
-        background: none;
-        border: none;
-        width: 40px;
-        height: 40px;
-        border-radius: 40px;
-        font-size: 18px;
-        cursor: pointer;
-        color: inherit;
-    }
-
-    .mini-play {
-        background: #ffffff;
-        color: #007aff;
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        border: 0.5px solid rgba(0, 0, 0, 0.05);
-    }
-
-    body.dark .mini-play {
-        background: #2c2c2e;
-        color: #007aff;
-        border: 0.5px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .profile-avatar {
-        width: 80px;
-        height: 80px;
-        font-size: 36px;
-    }
-}
-
-@media (min-width: 769px) {
-    .mobile-bottom-container { display: none; }
-    .mini-player { display: none; }
-}
-
-/* ========== ДИСКЛЕЙМЕР ========== */
-.disclaimer {
-    margin-top: 48px;
-    padding: 12px 16px;
-    text-align: center;
-    font-size: 10px;
-    color: rgba(142, 142, 147, 0.6);
-    border-top: 0.5px solid rgba(0, 0, 0, 0.05);
-    transition: color 0.2s;
-}
-
-body.dark .disclaimer {
-    color: rgba(142, 142, 147, 0.5);
-    border-top-color: rgba(255, 255, 255, 0.05);
-}
-
-.disclaimer a {
-    color: rgba(0, 122, 255, 0.6);
-    text-decoration: none;
-}
-
-body.dark .disclaimer a {
-    color: rgba(0, 122, 255, 0.6);
-}
-
-.disclaimer a:hover {
-    color: #007aff;
-    text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-    .disclaimer {
-        margin-top: 32px;
-        padding: 8px 12px;
-        font-size: 9px;
-    }
-}
-
 /* ========== ПОЛНОЭКРАННЫЙ ПЛЕЕР ========== */
 .fullscreen-player {
     position: fixed;
@@ -993,7 +757,7 @@ body.dark .disclaimer a {
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
     padding: 32px;
-    padding-bottom: 80px;
+    padding-bottom: 100px;
 }
 
 body.dark .fullscreen-player {
@@ -1004,28 +768,48 @@ body.dark .fullscreen-player {
     transform: translateY(0);
 }
 
-.swipe-indicator {
+/* Кнопка закрытия (крестик в кружке) */
+.close-fullscreen-btn {
     position: absolute;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 44px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    transition: all 0.2s;
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
     z-index: 10;
 }
 
-/* Анимированная нота с градиентом QQMusic */
+.close-fullscreen-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+}
+
+.close-fullscreen-btn:active {
+    transform: scale(0.94);
+}
+
+.close-fullscreen-btn i {
+    font-size: 20px;
+    color: white;
+}
+
+/* Анимированная нота */
 .animated-note {
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 240px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     background: linear-gradient(135deg, #1c1c1e, #007aff, #5856d6, #1c1c1e);
     background-size: 300% 300%;
     animation: gradientPulse 3s ease infinite, notePulse 2s ease-in-out infinite;
@@ -1049,7 +833,7 @@ body.dark .animated-note {
 }
 
 .animated-note i {
-    font-size: 80px;
+    font-size: 100px;
     color: white;
     position: absolute;
     left: 50%;
@@ -1058,31 +842,31 @@ body.dark .animated-note {
 }
 
 .fullscreen-title {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     color: white;
     margin-top: 20px;
 }
 
 .fullscreen-artist {
-    font-size: 18px;
+    font-size: 20px;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 48px;
+    margin-bottom: 56px;
     text-align: center;
 }
 
 .fullscreen-progress {
     width: 100%;
-    max-width: 300px;
-    margin-bottom: 48px;
+    max-width: 360px;
+    margin-bottom: 56px;
 }
 
 .fullscreen-progress .progress-bar-bg {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 100px;
-    height: 4px;
+    height: 6px;
     cursor: pointer;
 }
 
@@ -1096,25 +880,25 @@ body.dark .animated-note {
 .fullscreen-time {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.6);
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .fullscreen-controls {
     display: flex;
-    gap: 48px;
-    margin-bottom: 32px;
+    gap: 56px;
+    margin-bottom: 40px;
 }
 
 .fullscreen-ctrl {
     background: none;
     border: none;
     cursor: pointer;
-    width: 64px;
-    height: 64px;
-    border-radius: 64px;
-    font-size: 28px;
+    width: 72px;
+    height: 72px;
+    border-radius: 72px;
+    font-size: 32px;
     color: white;
     transition: all 0.2s;
 }
@@ -1130,10 +914,10 @@ body.dark .animated-note {
 
 .fullscreen-repeat {
     cursor: pointer;
-    font-size: 24px;
+    font-size: 28px;
     color: rgba(255, 255, 255, 0.6);
     transition: all 0.2s;
-    margin-top: 8px;
+    margin-top: 12px;
 }
 
 .fullscreen-repeat:hover {
@@ -1147,41 +931,58 @@ body.dark .animated-note {
 @media (max-width: 768px) {
     .fullscreen-player {
         padding: 20px;
-        padding-bottom: 60px;
+        padding-bottom: 80px;
+    }
+    
+    .close-fullscreen-btn {
+        top: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .close-fullscreen-btn i {
+        font-size: 18px;
     }
     
     .animated-note {
-        width: 150px;
-        height: 150px;
-        margin-bottom: 30px;
+        width: 180px;
+        height: 180px;
+        margin-bottom: 36px;
     }
     
     .animated-note i {
-        font-size: 60px;
+        font-size: 70px;
     }
     
     .fullscreen-title {
-        font-size: 24px;
+        font-size: 26px;
         margin-top: 16px;
     }
     
     .fullscreen-artist {
-        font-size: 16px;
-        margin-bottom: 32px;
+        font-size: 18px;
+        margin-bottom: 40px;
     }
     
     .fullscreen-progress {
-        margin-bottom: 32px;
+        max-width: 280px;
+        margin-bottom: 40px;
     }
     
     .fullscreen-controls {
-        gap: 32px;
-        margin-bottom: 24px;
+        gap: 40px;
+        margin-bottom: 32px;
     }
     
     .fullscreen-ctrl {
-        width: 56px;
-        height: 56px;
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+    }
+    
+    .fullscreen-repeat {
         font-size: 24px;
+        margin-top: 8px;
     }
 }
