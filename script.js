@@ -81,6 +81,160 @@ const currentTimeSpan = document.getElementById('currentTime');
 const durationSpan = document.getElementById('duration');
 const volumeSlider = document.getElementById('volumeSlider');
 
+// ========== ПОЛНОЭКРАННЫЙ ПЛЕЕР (ДОБАВЛЕНО) ==========
+const fullscreenPlayer = document.getElementById('fullscreenPlayer');
+const fullscreenTitle = document.getElementById('fullscreenTitle');
+const fullscreenArtist = document.getElementById('fullscreenArtist');
+const fullscreenPlay = document.getElementById('fullscreenPlay');
+const fullscreenPrev = document.getElementById('fullscreenPrev');
+const fullscreenNext = document.getElementById('fullscreenNext');
+const fullscreenRepeat = document.getElementById('fullscreenRepeat');
+const fullscreenProgressBar = document.getElementById('fullscreenProgressBar');
+const fullscreenProgressFill = document.getElementById('fullscreenProgressFill');
+const fullscreenCurrentTime = document.getElementById('fullscreenCurrentTime');
+const fullscreenDurationSpan = document.getElementById('fullscreenDuration');
+const closeFullscreenBtn = document.getElementById('closeFullscreenBtn');
+
+function openFullscreenPlayer() {
+    if (!tracksData[currentIndex]) return;
+    fullscreenPlayer.classList.add('open');
+    updateFullscreenInfo();
+}
+
+function closeFullscreenPlayer() {
+    fullscreenPlayer.classList.remove('open');
+}
+
+function updateFullscreenInfo() {
+    const track = tracksData[currentIndex];
+    if (track) {
+        fullscreenTitle.textContent = track.title;
+        fullscreenArtist.textContent = track.artist;
+    }
+    if (audio && audio.duration) {
+        fullscreenDurationSpan.textContent = formatDuration(audio.duration);
+        fullscreenCurrentTime.textContent = formatDuration(audio.currentTime);
+        const percent = (audio.currentTime / audio.duration) * 100;
+        fullscreenProgressFill.style.width = `${percent}%`;
+    }
+    updateFullscreenPlayBtn();
+    updateFullscreenRepeatIcon();
+}
+
+function updateFullscreenPlayBtn() {
+    const icon = fullscreenPlay.querySelector('i');
+    if (isPlaying) {
+        icon.className = 'fas fa-pause';
+    } else {
+        icon.className = 'fas fa-play';
+    }
+}
+
+function updateFullscreenRepeatIcon() {
+    if (repeatMode === 'all') {
+        fullscreenRepeat.classList.add('active');
+        fullscreenRepeat.querySelector('i').className = 'fas fa-repeat';
+    } else if (repeatMode === 'one') {
+        fullscreenRepeat.classList.add('active');
+        fullscreenRepeat.querySelector('i').className = 'fas fa-repeat-1';
+    } else {
+        fullscreenRepeat.classList.remove('active');
+        fullscreenRepeat.querySelector('i').className = 'fas fa-repeat';
+    }
+}
+
+function fullscreenTogglePlay() {
+    togglePlay();
+    updateFullscreenPlayBtn();
+}
+
+function fullscreenNextTrack() {
+    nextTrack();
+    updateFullscreenInfo();
+}
+
+function fullscreenPrevTrack() {
+    prevTrack();
+    updateFullscreenInfo();
+}
+
+function fullscreenToggleRepeat() {
+    if (repeatMode === 'none') {
+        repeatMode = 'all';
+        playerRepeat.classList.add('active');
+        playerRepeat.innerHTML = '<i class="fas fa-repeat"></i>';
+    } else if (repeatMode === 'all') {
+        repeatMode = 'one';
+        playerRepeat.innerHTML = '<i class="fas fa-repeat-1"></i>';
+    } else {
+        repeatMode = 'none';
+        playerRepeat.classList.remove('active');
+        playerRepeat.innerHTML = '<i class="fas fa-repeat"></i>';
+    }
+    updateFullscreenRepeatIcon();
+    const nextIdx = getNextIndex();
+    if (nextIdx !== currentIndex && audio) preloadTrack(nextIdx);
+}
+
+function fullscreenSeek(e) {
+    if (!audio || !audio.duration) return;
+    const rect = fullscreenProgressBar.getBoundingClientRect();
+    const percent = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    audio.currentTime = percent * audio.duration;
+}
+
+// Обновляем существующие функции для синхронизации с полноэкранным плеером
+const originalUpdatePlayBtn = updatePlayBtn;
+updatePlayBtn = function() {
+    originalUpdatePlayBtn();
+    updateFullscreenPlayBtn();
+};
+
+const originalUpdatePlayerInfo = updatePlayerInfo;
+updatePlayerInfo = function(track) {
+    originalUpdatePlayerInfo(track);
+    if (fullscreenPlayer.classList.contains('open')) {
+        fullscreenTitle.textContent = track.title;
+        fullscreenArtist.textContent = track.artist;
+    }
+};
+
+const originalUpdateProgress = function() {
+    if (audio && audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = `${percent}%`;
+        currentTimeSpan.textContent = formatDuration(audio.currentTime);
+        if (fullscreenPlayer.classList.contains('open')) {
+            fullscreenProgressFill.style.width = `${percent}%`;
+            fullscreenCurrentTime.textContent = formatDuration(audio.currentTime);
+        }
+    }
+};
+
+// Переопределяем обработчик времени
+const originalTimeUpdate = (audioElem) => {
+    audioElem.addEventListener('timeupdate', () => {
+        if (audioElem.duration) {
+            const percent = (audioElem.currentTime / audioElem.duration) * 100;
+            progressFill.style.width = `${percent}%`;
+            currentTimeSpan.textContent = formatDuration(audioElem.currentTime);
+            if (fullscreenPlayer.classList.contains('open')) {
+                fullscreenProgressFill.style.width = `${percent}%`;
+                fullscreenCurrentTime.textContent = formatDuration(audioElem.currentTime);
+            }
+        }
+    });
+};
+
+// Подключаем события полноэкранного плеера
+if (fullscreenPlay) fullscreenPlay.addEventListener('click', fullscreenTogglePlay);
+if (fullscreenPrev) fullscreenPrev.addEventListener('click', fullscreenPrevTrack);
+if (fullscreenNext) fullscreenNext.addEventListener('click', fullscreenNextTrack);
+if (fullscreenRepeat) fullscreenRepeat.addEventListener('click', fullscreenToggleRepeat);
+if (fullscreenProgressBar) fullscreenProgressBar.addEventListener('click', fullscreenSeek);
+if (closeFullscreenBtn) closeFullscreenBtn.addEventListener('click', closeFullscreenPlayer);
+if (miniPlayer) miniPlayer.addEventListener('click', openFullscreenPlayer);
+
 // ========== СТАТИСТИКА ==========
 function loadStats() {
     const saved = localStorage.getItem('qqmusic_stats');
@@ -191,11 +345,21 @@ function getNextIndex() {
 }
 
 function setupAudioEvents(audioElem, track, autoPlay) {
-    audioElem.addEventListener('loadedmetadata', () => { durationSpan.textContent = formatDuration(audioElem.duration); });
+    audioElem.addEventListener('loadedmetadata', () => { 
+        durationSpan.textContent = formatDuration(audioElem.duration);
+        if (fullscreenPlayer.classList.contains('open')) {
+            fullscreenDurationSpan.textContent = formatDuration(audioElem.duration);
+        }
+    });
     audioElem.addEventListener('timeupdate', () => {
         if (audioElem.duration) {
-            progressFill.style.width = (audioElem.currentTime / audioElem.duration * 100) + '%';
+            const percent = (audioElem.currentTime / audioElem.duration) * 100;
+            progressFill.style.width = `${percent}%`;
             currentTimeSpan.textContent = formatDuration(audioElem.currentTime);
+            if (fullscreenPlayer.classList.contains('open')) {
+                fullscreenProgressFill.style.width = `${percent}%`;
+                fullscreenCurrentTime.textContent = formatDuration(audioElem.currentTime);
+            }
         }
     });
     audioElem.addEventListener('play', () => { playStartTime = Date.now(); });
@@ -272,6 +436,10 @@ function updatePlayerInfo(track) {
         desktopTitle.textContent = title;
         desktopArtist.textContent = artist;
     }
+    if (fullscreenPlayer.classList.contains('open')) {
+        fullscreenTitle.textContent = title;
+        fullscreenArtist.textContent = artist;
+    }
 }
 
 function togglePlay() {
@@ -283,6 +451,7 @@ function togglePlay() {
 function updatePlayBtn() {
     const icon = window.innerWidth <= 768 ? miniPlay.querySelector('i') : playerPlay.querySelector('i');
     if (icon) icon.className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
+    updateFullscreenPlayBtn();
 }
 
 function nextTrack() { const nextIdx = getNextIndex(); if (nextIdx !== currentIndex) { currentIndex = nextIdx; loadTrack(currentIndex, true); } }
@@ -495,6 +664,7 @@ function toggleRepeat() {
     else { repeatMode = 'none'; playerRepeat.classList.remove('active'); playerRepeat.innerHTML = '<i class="fas fa-repeat"></i>'; }
     const nextIdx = getNextIndex();
     if (nextIdx !== currentIndex && audio) preloadTrack(nextIdx);
+    updateFullscreenRepeatIcon();
 }
 
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
