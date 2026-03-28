@@ -1,4 +1,5 @@
 export const tracksData = [
+    { id: 76, title: "Я хочу", artist: "GRIVINA", file: "GRIVINA_-_ya_nadenu_bele_s_kruzhivami_72727023.mp3" },
     { id: 75, title: "Остров", artist: "Мы", file: "My_-_Ostrov_59130758.mp3" },
     { id: 74, title: "Умри если меня не любишь", artist: "DAKOOKA", file: "da_kooka_-_Bledno_belye_rozy_64441681.mp3" },
     { id: 73, title: "Невеста", artist: "Glukoza", file: "GlyukoZa_-_Nevesta_62255647.mp3" },
