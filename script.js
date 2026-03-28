@@ -714,35 +714,18 @@ function init() {
     hidePlayer();
     if (tracksData.length) preloadTrack(0);
     renderHomeStats();
-}
-// ========== ДОБАВЛЯЕМ СВАЙП ДЛЯ ЗАКРЫТИЯ ==========
-let touchStartY = 0;
-let touchEndY = 0;
-
-function handleTouchStart(e) {
-    touchStartY = e.touches[0].clientY;
-}
-
-function handleTouchMove(e) {
-    touchEndY = e.touches[0].clientY;
-}
-
-function handleTouchEnd() {
-    if (touchStartY - touchEndY > 50) {
-        // Свайп вверх — ничего не делаем
-        return;
-    }
-    if (touchEndY - touchStartY > 50) {
-        // Свайп вниз — закрываем
-        closeFullscreenPlayer();
-    }
+    
+    // ПРИНУДИТЕЛЬНО ПОДКЛЮЧАЕМ КНОПКУ ЗАКРЫТИЯ ПОСЛЕ ЗАГРУЗКИ
+    setTimeout(() => {
+        const closeBtn = document.getElementById('closeFullscreenBtn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeFullscreenPlayer);
+            console.log('✅ Кнопка закрытия подключена');
+        } else {
+            console.log('❌ Кнопка закрытия не найдена');
+        }
+    }, 100);
 }
 
-// Добавляем обработчики свайпа
-if (fullscreenPlayer) {
-    fullscreenPlayer.addEventListener('touchstart', handleTouchStart);
-    fullscreenPlayer.addEventListener('touchmove', handleTouchMove);
-    fullscreenPlayer.addEventListener('touchend', handleTouchEnd);
-}
-
+// Запускаем
 init();
