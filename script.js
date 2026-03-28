@@ -715,5 +715,34 @@ function init() {
     if (tracksData.length) preloadTrack(0);
     renderHomeStats();
 }
+// ========== ДОБАВЛЯЕМ СВАЙП ДЛЯ ЗАКРЫТИЯ ==========
+let touchStartY = 0;
+let touchEndY = 0;
+
+function handleTouchStart(e) {
+    touchStartY = e.touches[0].clientY;
+}
+
+function handleTouchMove(e) {
+    touchEndY = e.touches[0].clientY;
+}
+
+function handleTouchEnd() {
+    if (touchStartY - touchEndY > 50) {
+        // Свайп вверх — ничего не делаем
+        return;
+    }
+    if (touchEndY - touchStartY > 50) {
+        // Свайп вниз — закрываем
+        closeFullscreenPlayer();
+    }
+}
+
+// Добавляем обработчики свайпа
+if (fullscreenPlayer) {
+    fullscreenPlayer.addEventListener('touchstart', handleTouchStart);
+    fullscreenPlayer.addEventListener('touchmove', handleTouchMove);
+    fullscreenPlayer.addEventListener('touchend', handleTouchEnd);
+}
 
 init();
