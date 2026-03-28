@@ -993,6 +993,7 @@ body.dark .disclaimer a {
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
     padding: 32px;
+    padding-bottom: 80px;
 }
 
 body.dark .fullscreen-player {
@@ -1013,6 +1014,7 @@ body.dark .fullscreen-player {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 4px;
     cursor: pointer;
+    z-index: 10;
 }
 
 /* Анимированная нота с градиентом QQMusic */
@@ -1023,10 +1025,11 @@ body.dark .fullscreen-player {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 48px;
+    margin-bottom: 40px;
     background: linear-gradient(135deg, #1c1c1e, #007aff, #5856d6, #1c1c1e);
     background-size: 300% 300%;
     animation: gradientPulse 3s ease infinite, notePulse 2s ease-in-out infinite;
+    position: relative;
 }
 
 body.dark .animated-note {
@@ -1048,6 +1051,10 @@ body.dark .animated-note {
 .animated-note i {
     font-size: 80px;
     color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .fullscreen-title {
@@ -1056,19 +1063,20 @@ body.dark .animated-note {
     text-align: center;
     margin-bottom: 8px;
     color: white;
+    margin-top: 20px;
 }
 
 .fullscreen-artist {
     font-size: 18px;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 32px;
+    margin-bottom: 48px;
     text-align: center;
 }
 
 .fullscreen-progress {
     width: 100%;
     max-width: 300px;
-    margin-bottom: 32px;
+    margin-bottom: 48px;
 }
 
 .fullscreen-progress .progress-bar-bg {
@@ -1095,18 +1103,18 @@ body.dark .animated-note {
 
 .fullscreen-controls {
     display: flex;
-    gap: 32px;
-    margin-bottom: 24px;
+    gap: 48px;
+    margin-bottom: 32px;
 }
 
 .fullscreen-ctrl {
     background: none;
     border: none;
     cursor: pointer;
-    width: 56px;
-    height: 56px;
-    border-radius: 56px;
-    font-size: 24px;
+    width: 64px;
+    height: 64px;
+    border-radius: 64px;
+    font-size: 28px;
     color: white;
     transition: all 0.2s;
 }
@@ -1125,6 +1133,7 @@ body.dark .animated-note {
     font-size: 24px;
     color: rgba(255, 255, 255, 0.6);
     transition: all 0.2s;
+    margin-top: 8px;
 }
 
 .fullscreen-repeat:hover {
@@ -1137,12 +1146,14 @@ body.dark .animated-note {
 
 @media (max-width: 768px) {
     .fullscreen-player {
-        padding: 24px;
+        padding: 20px;
+        padding-bottom: 60px;
     }
     
     .animated-note {
         width: 150px;
         height: 150px;
+        margin-bottom: 30px;
     }
     
     .animated-note i {
@@ -1151,15 +1162,26 @@ body.dark .animated-note {
     
     .fullscreen-title {
         font-size: 24px;
+        margin-top: 16px;
     }
     
     .fullscreen-artist {
         font-size: 16px;
+        margin-bottom: 32px;
+    }
+    
+    .fullscreen-progress {
+        margin-bottom: 32px;
+    }
+    
+    .fullscreen-controls {
+        gap: 32px;
+        margin-bottom: 24px;
     }
     
     .fullscreen-ctrl {
-        width: 48px;
-        height: 48px;
-        font-size: 20px;
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
     }
 }
