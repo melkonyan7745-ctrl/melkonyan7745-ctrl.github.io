@@ -83,7 +83,7 @@
     <div class="floating-search-btn" id="mobileSearchBtn"><i class="fas fa-search"></i></div>
 </div>
 
-<div class="mini-player hidden" id="miniPlayer">
+<div class="mini-player hidden" id="miniPlayer" onclick="openFullscreenPlayer()">
     <div class="mini-content">
         <div class="mini-info">
             <div class="mini-title" id="miniTitle">Выберите трек</div>
@@ -93,6 +93,33 @@
             <button class="mini-ctrl mini-play" id="miniPlay"><i class="fas fa-play"></i></button>
             <button class="mini-ctrl" id="miniNext"><i class="fas fa-forward-step"></i></button>
         </div>
+    </div>
+</div>
+
+<!-- ПОЛНОЭКРАННЫЙ ПЛЕЕР -->
+<div class="fullscreen-player" id="fullscreenPlayer">
+    <div class="swipe-indicator" id="closeFullscreenBtn"></div>
+    <div class="animated-note" id="animatedNote">
+        <i class="fas fa-music"></i>
+    </div>
+    <div class="fullscreen-title" id="fullscreenTitle">Выберите трек</div>
+    <div class="fullscreen-artist" id="fullscreenArtist">—</div>
+    <div class="fullscreen-progress">
+        <div class="progress-bar-bg" id="fullscreenProgressBar">
+            <div class="progress-fill" id="fullscreenProgressFill"></div>
+        </div>
+        <div class="fullscreen-time">
+            <span id="fullscreenCurrentTime">0:00</span>
+            <span id="fullscreenDuration">0:00</span>
+        </div>
+    </div>
+    <div class="fullscreen-controls">
+        <button class="fullscreen-ctrl" id="fullscreenPrev"><i class="fas fa-backward-step"></i></button>
+        <button class="fullscreen-ctrl play-btn" id="fullscreenPlay"><i class="fas fa-play"></i></button>
+        <button class="fullscreen-ctrl" id="fullscreenNext"><i class="fas fa-forward-step"></i></button>
+    </div>
+    <div class="fullscreen-repeat" id="fullscreenRepeat">
+        <i class="fas fa-repeat"></i>
     </div>
 </div>
 
